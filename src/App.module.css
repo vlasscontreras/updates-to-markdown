@@ -1,0 +1,36 @@
+.App {
+  align-items: center;
+  background-color: #282c34;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  font-size: calc(10px + 2vmin);
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
+}
+
+.App .container-fluid,
+.App .container-fluid .row {
+  height: 100%;
+  min-height: 100vh;
+}
+
+.h-100vh {
+  height: 100%;
+  min-height: 100vh;
+}
+
+.h-70vh {
+  height: 100%;
+  min-height: 70vh;
+}
+
+[contenteditable="true"] {
+  max-height: 70vh;
+  overflow-y: scroll;
+}
+
+.prewrap {
+  white-space: pre-wrap;
+}
