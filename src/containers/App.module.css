@@ -21,13 +21,13 @@
   min-height: 100vh;
 }
 
-.h-70vh {
+.h-60vh {
   height: 100%;
-  min-height: 70vh;
+  min-height: 60vh;
 }
 
 [contenteditable="true"] {
-  max-height: 70vh;
+  max-height: 60vh;
   overflow-y: scroll;
 }
 
