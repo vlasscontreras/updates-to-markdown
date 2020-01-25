@@ -1,68 +1,34 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Updates to Markdown
 
-## Available Scripts
+[![GitHub Workflows](https://github.com/vlasscontreras/updates-to-markdown/workflows/Build/badge.svg)](https://github.com/vlasscontreras/updates-to-markdown)
+[![Version](https://img.shields.io/badge/version-0.1.0-brightgreen.svg)](https://github.com/vlasscontreras/updates-to-markdown)
 
-In the project directory, you can run:
+Have you ever been in a situation where you want to keep a register of the updates you apply to a WordPress site or a Linux server? 🤔 You know, in case something happens so you know what exact version to revert while applying the fix 🤓
 
-### `npm start`
+Well, that's what this tool is for! It also served me to practice React 😅 so feel free to submit your PR if you have feedback, suggestons, fixes, or improvements.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Usage
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+It's pretty simple, but it depends on your source of updates.
 
-### `npm test`
+For WordPress, copy the output of the updates table on the Update Core page:
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+![img](https://raw.githubusercontent.com/vlasscontreras/updates-to-markdown/master/docs/assets/img/wordpress-core-updater.png)
 
-### `npm run build`
+For APT, copy the ouput of the list command `apt update && apt list --upgradable`:
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+![img](https://raw.githubusercontent.com/vlasscontreras/updates-to-markdown/master/docs/assets/img/apt-list-upgradable.png)
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+And paste it on the left textbox of this app:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+![img](https://raw.githubusercontent.com/vlasscontreras/updates-to-markdown/master/docs/assets/img/updates-to-markdown.png)
 
-### `npm run eject`
+And you will have an instant version in Markdown format on the left side, ready to copy 😁:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```markdown
+- Upgraded WordPress Packages:
+  - Post SMTP to `v2.0.10` from `v2.0.9`
+  - Yoast SEO to `v12.9.1` from `v12.8.1`
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+That will make it easier for you to write changelogs in a more readable way 🙂
