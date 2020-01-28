@@ -24,10 +24,10 @@ class App extends React.Component {
 
   state = {
     /** Inputted text. */
-    input: '',
+    input: localStorage.getItem('updates2Markdown.input'),
 
     /** Source of updates: apt/wp */
-    source: 'apt',
+    source: localStorage.getItem('updates2Markdown.source') || 'apt',
 
     /** Inputted text converted to Markdown. */
     markdown: '',
@@ -43,6 +43,20 @@ class App extends React.Component {
   }
 
   /**
+   * Update selected source
+   *
+   * @param {Object} event The event that triggered this action.
+   */
+  updateSource = (event) => {
+    this.setState({
+      source: event.target.value
+    }, () => {
+      localStorage.setItem('updates2Markdown.source', this.state.source);
+      this.convert2MarkDown();
+    });
+  }
+
+  /**
    * Update the base input
    *
    * @param {Object} event The event that triggered this method.
@@ -51,6 +65,7 @@ class App extends React.Component {
     this.setState({
       input: event.target.value,
     }, () => {
+      localStorage.setItem('updates2Markdown.input', this.state.input);
       this.convert2MarkDown();
     });
   }
@@ -60,37 +75,66 @@ class App extends React.Component {
    */
   convert2MarkDown = () => {
     let markdown;
+    let regex;
+
+    if (! this.state.input) {
+      this.sendGTMHit('Convert to Markdown', {
+        sourceType: this.state.source,
+        result: 'No Input',
+      });
+
+      return;
+    }
 
     if (this.state.source === 'apt') {
-      markdown = `- Upgraded OS Packages:<br>` + this.state.input.replace(
-        /^(.[^\s]*) (.[^\s]*) .[^\s]* \[upgradable from: (.[^\s]*)\]\n?/gm,
-        '  - $1 to `v$2` from `v$3`<br>'
-      );
+      regex = /^(.[^\s]*) (.[^\s]*) .[^\s]* \[upgradable from: (.[^\s]*)\]\n?/gm;
+
+      if (this.state.input.search(regex) >= 0) {
+        markdown = `- Upgraded OS Packages:<br>` + this.state.input.replace(
+          regex,
+          '  - $1 to `v$2` from `v$3`<br>'
+        );
+      } else {
+        return;
+      }
     } else if (this.state.source === 'wp') {
-      markdown = `- Upgraded WordPress Packages:<br>` + this.state.input.replace(
-          /(.*)\nYou have version (\d.*) installed. Update to (\d.*)(. View version \d.* details.)\n(Compatibility with WordPress \d.*: .*)(\n.*)?\n?(\n?\n?.*\n?\n?\n?)/gm,
+      regex = /(.*)\nYou have version (\d.*) installed. Update to (\d.*)(. View version \d.* details.)\n(Compatibility with WordPress \d.*: .*)(\n.*)?\n?(\n?\n?.*\n?\n?\n?)/gm;
+
+      if (this.state.input.search(regex) >= 0) {
+        markdown = `- Upgraded WordPress Packages:<br>` + this.state.input.replace(
+          regex,
           '  - $1 to `v$3` from `v$2`<br>'
         );
+      } else {
+        return;
+      }
     }
 
     this.setState({
       markdown: markdown,
       html: marked(markdown),
       output: markdown
+    }, () => {
+      this.sendGTMHit('Convert to Markdown', {
+        sourceType: this.state.source,
+        result: 'Match',
+      });
     });
   }
 
   /**
-   * Update selected source
+   * Send hit to Google Tag Manager
    *
-   * @param {Object} event The event that triggered this action.
+   * @param {String} event Event name.
+   * @param {Object} data  Event data.
    */
-  updateSource = (event) => {
-    this.setState({
-      source: event.target.value
-    }, () => {
-      this.convert2MarkDown();
-    });
+  sendGTMHit = (event, data) => {
+    if (typeof window.dataLayer !== 'undefined') {
+      window.dataLayer.push({
+        event: event,
+        ...data
+      });
+    }
   }
 
   /**
@@ -126,6 +170,10 @@ class App extends React.Component {
         output: this.state.markdown
       });
     }
+  }
+
+  componentDidMount() {
+    this.convert2MarkDown();
   }
 
   render() {
@@ -169,7 +217,7 @@ class App extends React.Component {
               type="radio"
               id="sourceAPT"
               value="apt"
-              defaultChecked
+              defaultChecked={ this.state.source === 'apt' }
               onChange={this.updateSource} />
             <label className={bsStyles['form-check-label']} htmlFor="sourceAPT">APT</label>
           </div>
@@ -180,6 +228,7 @@ class App extends React.Component {
               type="radio"
               id="sourceWP"
               value="wp"
+              defaultChecked={ this.state.source === 'wp' }
               onChange={this.updateSource} />
             <label className={bsStyles['form-check-label']} htmlFor="sourceWP">WP</label>
           </div>
